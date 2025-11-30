@@ -1,7 +1,9 @@
 # ComfyUI-DGXSparkSafetensorsLoader
 **A ComfyUI model loader that uses the fastsafetensors library to perform a very fast, zero-copy load from storage to VRAM.**
 
-This is very experimental, and may destroy the universe. So please don't use it in a production environment under any circumstances.
+_This is very experimental, and may destroy the universe. So please don't use it in a production environment under any circumstances._
+
+On DGX Spark, fastsafetensors is a massive improvement over the Hugging Face safetensors library for loading AI models. The Hugging Face library doesn't work well with the DGX Spark due to its architecture and memory design. Models load very slowly and sometimes use up to 2x memory during loading. This can cause large models to exceed the Spark's RAM capacity and fail, even when the model should fit in under half of the machine's RAM capacity.
 
 This node doesn't require ComfyUI to be launched with the --cache-none or --disable-mmap options. The default options should work fine.
 
