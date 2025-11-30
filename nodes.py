@@ -56,15 +56,6 @@ class DGXSparkSafetensorsLoader:
         #fb.close() # No!
         #loader.close() # No!
         
-        # You can also try with fastsafe_open instead of SafeTensorsFileLoader.
-        # This might work just as well.
-        # with fastsafe_open(filenames=[model_path], nogds=False, device=device, debug_log=True) as f:
-        #    sd = {} # state dictionary
-        #    for k in f.keys():
-        #        sd[k] = f.get_tensor(k)
-        #        #sd[k] = f.get_tensor(k).detach().clone() # clone if tensor is used outside (uses 2x memory!)
-		#        #sd[k] = f.get_tensor(k).to(device=dev, copy=False) # uses 2x memory!
-	
         # Init the model to pass to ComfyUI
         model_config = comfy.model_detection.model_config_from_unet(sd, "", metadata=metadata)
         model_config.set_inference_dtype(DTYPE_MAP[dtype], DTYPE_MAP[dtype])
