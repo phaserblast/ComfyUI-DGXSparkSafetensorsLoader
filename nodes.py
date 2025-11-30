@@ -27,8 +27,6 @@ class DGXSparkSafetensorsLoader:
     FUNCTION = "load_model"
     CATEGORY = "loaders"
     DESCRIPTION = "Node for loading a .safetensors file directly into memory using GPU Direct on DGX Spark."
-    TITLE = "DGX Spark Safetensors Loader"
-    
      
     def load_model(self, model_name, dtype):
         DTYPE_MAP = {
