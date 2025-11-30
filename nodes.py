@@ -17,7 +17,6 @@ class DGXSparkSafetensorsLoader:
     def INPUT_TYPES(s):
         return {
             "required": {
-                #"model_name": (unet_names,),
                 "model_name": (folder_paths.get_filename_list("diffusion_models"), {"tooltip": "The filename of the .safetensors model to load."}),
             }
         }
@@ -56,9 +55,8 @@ class DGXSparkSafetensorsLoader:
         #    sd = {} # state dictionary
         #    for k in f.keys():
         #        sd[k] = f.get_tensor(k)
-                #sd[k] = f.get_tensor(k).detach().clone() # clone if tensor is used outside (uses 2x memory!)
-		#sd[k] = f.get_tensor(k).to(device=dev, copy=False) # uses 2x memory!
-		#del tensor
+        #        #sd[k] = f.get_tensor(k).detach().clone() # clone if tensor is used outside (uses 2x memory!)
+		#        #sd[k] = f.get_tensor(k).to(device=dev, copy=False) # uses 2x memory!
 	
         # Init the model to pass to ComfyUI
         model_config = comfy.model_detection.model_config_from_unet(sd, "", metadata=metadata)
