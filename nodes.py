@@ -18,19 +18,26 @@ class DGXSparkSafetensorsLoader:
         return {
             "required": {
                 "model_name": (folder_paths.get_filename_list("diffusion_models"), {"tooltip": "The filename of the .safetensors model to load."}),
+				"dtype": (["fp8_e4m3fn", "fp8_e5m2", "fp16", "bf16", "fp32"],{"default": "bf16"}),
             }
         }
         
     RETURN_TYPES = ("MODEL",)
     RETURN_NAMES = ("model",)
     FUNCTION = "load_model"
-    
     CATEGORY = "loaders"
     DESCRIPTION = "Node for loading a .safetensors file directly into memory using GPU Direct on DGX Spark."
     TITLE = "DGX Spark Safetensors Loader"
     
      
-    def load_model(self, model_name):
+    def load_model(self, model_name, dtype):
+        DTYPE_MAP = {
+            "fp8_e4m3fn": torch.float8_e4m3fn,
+            "fp8_e5m2": torch.float8_e5m2,
+            "fp16": torch.float16,
+            "bf16": torch.bfloat16,
+            "fp32": torch.float32
+        }
         device = torch.device("cuda:0")
         model_path = folder_paths.get_full_path_or_raise("diffusion_models", model_name)
         
@@ -60,7 +67,7 @@ class DGXSparkSafetensorsLoader:
 	
         # Init the model to pass to ComfyUI
         model_config = comfy.model_detection.model_config_from_unet(sd, "", metadata=metadata)
-        model_config.set_inference_dtype(torch.bfloat16, torch.bfloat16)
+        model_config.set_inference_dtype(DTYPE_MAP[dtype], DTYPE_MAP[dtype])
         model = model_config.get_model(sd, "", device=None)
         
         # Use this instead of load_model_weights()
