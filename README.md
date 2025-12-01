@@ -13,3 +13,6 @@ Here's an example of memory usage during and after loading the 60GB FLUX.2-dev B
 
 fastsafetensors library project on GitHub:
 https://github.com/foundation-model-stack/fastsafetensors
+
+# Known Issues
+This currently doesn't seem to work with machines that have discrete GPUs, although the loading problem isn't as bad on systems without shared memory. In this case, just use the normal model loader included with ComfyUI.
