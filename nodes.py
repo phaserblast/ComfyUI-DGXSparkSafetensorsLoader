@@ -56,6 +56,10 @@ class DGXSparkSafetensorsLoader:
         
         # Init the model to pass to ComfyUI
         model_config = comfy.model_detection.model_config_from_unet(sd, "", metadata=metadata)
+        if model_config == None:
+            fb.close()
+            loader.close()
+            raise Exception("Couldn't load the model.")
         model_config.set_inference_dtype(DTYPE_MAP[dtype], DTYPE_MAP[dtype])
         model = model_config.get_model(sd, "", device=None)
         
