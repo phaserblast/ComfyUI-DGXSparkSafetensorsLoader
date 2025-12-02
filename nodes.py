@@ -60,7 +60,7 @@ class DGXSparkSafetensorsLoader:
             fb.close()
             loader.close()
             raise Exception("Couldn't load the model.")
-        model_config.set_inference_dtype(DTYPE_MAP[dtype], DTYPE_MAP[dtype])
+        model_config.set_inference_dtype(DTYPE_MAP[dtype], torch.bfloat16)
         model = model_config.get_model(sd, "", device=None)
         
         # Use this instead of load_model_weights()
