@@ -3,9 +3,7 @@
 # Released under the Apache 2.0 license.
 import torch
 import folder_paths
-import comfy.sd
-import comfy.model_detection
-import comfy.model_patcher
+import comfy
 
 # https://github.com/foundation-model-stack/fastsafetensors
 from fastsafetensors import fastsafe_open,SafeTensorsFileLoader,SingleGroup
@@ -50,12 +48,17 @@ class DGXSparkSafetensorsLoader:
         #loader.close() # No!
         
         # Init the model to pass to ComfyUI
+        diffusion_model_prefix = comfy.model_detection.unet_prefix_from_state_dict(sd)
+        temp_sd = comfy.utils.state_dict_prefix_replace(sd, {diffusion_model_prefix: ""}, filter_keys=True)
+        if len(temp_sd) > 0:
+            sd = temp_sd
         model_config = comfy.model_detection.model_config_from_unet(sd, "", metadata=metadata)
         if model_config == None:
             fb.close()
             loader.close()
-            raise Exception("Couldn't load the model.")
-        model_config.set_inference_dtype(DTYPE_MAP[dtype], torch.bfloat16)
+            raise RuntimeError("Couldn't load the model.")
+        model_dtype = comfy.utils.weight_dtype(sd, "")
+        model_config.set_inference_dtype(model_dtype, torch.bfloat16)
         model = model_config.get_model(sd, "", device=None)
         
         # Use this instead of load_model_weights()
@@ -78,7 +81,6 @@ class DGXSparkSafetensorsLoader:
         model = comfy.model_patcher.ModelPatcher(model, load_device=device, offload_device=None)
         
         # Don't free anything, this is just here for completeness 
-        #del sd
         #fb.close()
         #loader.close()
         return (model,)
