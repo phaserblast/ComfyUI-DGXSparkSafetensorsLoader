@@ -12,4 +12,4 @@ Here's an example of memory usage during and after loading the 60GB FLUX.2-dev B
 ![FLUX.2-dev memory usage](https://github.com/user-attachments/assets/6a3a4ff7-bc4e-47ea-99b7-d4961b505a01)
 
 # Known Issues
-This currently doesn't seem to work with machines that have discrete GPUs, although the loading problem isn't as bad on systems without shared memory. In this case, just use the normal model loader included with ComfyUI.
+Some .safetensors models won't load. For example, I couldn't get qwen_image_edit_2509_fp8_e4m3fn.safetensors to load. In this case, just use the normal model loader included with ComfyUI.
