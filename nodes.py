@@ -14,7 +14,7 @@ class DGXSparkSafetensorsLoader:
         return {
             "required": {
                 "model_name": (folder_paths.get_filename_list("diffusion_models"), {"tooltip": "The filename of the .safetensors model to load."}),
-				"dtype": (["fp8_e4m3fn", "fp8_e5m2", "fp16", "bf16", "fp32"],{"default": "bf16"}),
+                "device": (["cuda:0"],{"default": "cuda:0", "tooltip": "The device to which the model will be copied."}),
             }
         }
         
@@ -24,19 +24,12 @@ class DGXSparkSafetensorsLoader:
     CATEGORY = "loaders"
     DESCRIPTION = "Node for loading a .safetensors file directly into memory using GPU Direct on DGX Spark."
      
-    def load_model(self, model_name, dtype):
-        DTYPE_MAP = {
-            "fp8_e4m3fn": torch.float8_e4m3fn,
-            "fp8_e5m2": torch.float8_e5m2,
-            "fp16": torch.float16,
-            "bf16": torch.bfloat16,
-            "fp32": torch.float32
-        }
-        device = torch.device("cuda:0")
+    def load_model(self, model_name, device):
+        dev = torch.device(device)
         model_path = folder_paths.get_full_path_or_raise("diffusion_models", model_name)
         
         # fastsafetensors
-        loader = SafeTensorsFileLoader(SingleGroup(), device)
+        loader = SafeTensorsFileLoader(SingleGroup(), dev)
         loader.add_filenames({0: [model_path]})
         metadata = loader.meta[model_path][0].metadata
         fb = loader.copy_files_to_device()
@@ -78,7 +71,7 @@ class DGXSparkSafetensorsLoader:
         # loaded with fastsafetensors.
         model.diffusion_model.load_state_dict(sd, strict=False, assign=True)
         
-        model = comfy.model_patcher.ModelPatcher(model, load_device=device, offload_device=None)
+        model = comfy.model_patcher.ModelPatcher(model, load_device=dev, offload_device=None)
         
         # Don't free anything, this is just here for completeness 
         #fb.close()
