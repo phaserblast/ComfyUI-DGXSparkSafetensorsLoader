@@ -12,6 +12,6 @@ Here's an example of memory usage during and after loading the 60GB FLUX.2-dev B
 ![FLUX.2-dev memory usage](https://github.com/user-attachments/assets/6a3a4ff7-bc4e-47ea-99b7-d4961b505a01)
 
 # Known Issues
-* Some .safetensors models won't load. For example, I couldn't get qwen_image_edit_2509_fp8_e4m3fn.safetensors to load. In this case, just use the normal model loader included with ComfyUI.
-
 * Errors in yout ComfyUI workflow may leave the fastsafetensors loader in an allocated state, since ComfyUI can't free it. If this happens, you may get an OOM error on your next run. The workaround is to just quit and restart ComfyUI to clear VRAM.
+
+* This node has not been tested on machines with discrete GPUs.
