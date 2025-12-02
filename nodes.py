@@ -22,7 +22,7 @@ class DGXSparkSafetensorsLoader:
     RETURN_NAMES = ("model",)
     FUNCTION = "load_model"
     CATEGORY = "loaders"
-    DESCRIPTION = "Node for loading a .safetensors file directly into memory using GPU Direct on DGX Spark."
+    DESCRIPTION = "Loads a .safetensors file directly into memory using NVIDIA GPUDirect on DGX Spark."
      
     def load_model(self, model_name, device):
         dev = torch.device(device)
