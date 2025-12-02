@@ -7,8 +7,6 @@ import comfy.sd
 import comfy.model_detection
 import comfy.model_patcher
 
-from safetensors import safe_open
-
 # https://github.com/foundation-model-stack/fastsafetensors
 from fastsafetensors import fastsafe_open,SafeTensorsFileLoader,SingleGroup
 
@@ -39,13 +37,10 @@ class DGXSparkSafetensorsLoader:
         device = torch.device("cuda:0")
         model_path = folder_paths.get_full_path_or_raise("diffusion_models", model_name)
         
-        # Copy metadata only using HF safetensors library
-        with safe_open(model_path, framework="pt") as f:
-            metadata = f.metadata()
-        
         # fastsafetensors
         loader = SafeTensorsFileLoader(SingleGroup(), device)
         loader.add_filenames({0: [model_path]})
+        metadata = loader.meta[model_path][0].metadata
         fb = loader.copy_files_to_device()
         keys = list(fb.key_to_rank_lidx.keys())
         sd = {} # state dictionary
