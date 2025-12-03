@@ -11,6 +11,14 @@ Here's an example of memory usage during and after loading the 60GB FLUX.2-dev B
 
 ![FLUX.2-dev memory usage](https://github.com/user-attachments/assets/6a3a4ff7-bc4e-47ea-99b7-d4961b505a01)
 
+# How to Install
+Clone this repository into your ComfyUI/custom_nodes folder:
+```
+cd ComfyUI/custom_nodes
+git clone https://github.com/phaserblast/ComfyUI-DGXSparkSafetensorsLoader.git
+```
+Restart ComfyUI, and search for the "DGX Spark Safetensors Loader" node. It should also be in the "loaders" category. Use this node in place of ComfyUI's built-in "Load Diffusion Model" node.
+
 # Known Issues
 * Errors in yout ComfyUI workflow may leave the fastsafetensors loader in an allocated state, since ComfyUI can't free it. If this happens, you may get an OOM error on your next run. The workaround is to just quit and restart ComfyUI to clear VRAM.
 
