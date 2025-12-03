@@ -17,6 +17,11 @@ Clone this repository into your ComfyUI/custom_nodes folder:
 cd ComfyUI/custom_nodes
 git clone https://github.com/phaserblast/ComfyUI-DGXSparkSafetensorsLoader.git
 ```
+Install the fastsafetensors Python package. If you use a Python venv, remember activate it first:
+```
+source venv/bin/activate
+pip install fastsafetensors
+```
 Restart ComfyUI, and search for the "DGX Spark Safetensors Loader" node. It should also be in the "loaders" category. Use this node in place of ComfyUI's built-in "Load Diffusion Model" node.
 
 # Known Issues
