@@ -25,6 +25,6 @@ pip install fastsafetensors
 Restart ComfyUI, and search for the "DGX Spark Safetensors Loader" node. It should also be in the "loaders" category. Use this node in place of ComfyUI's built-in "Load Diffusion Model" node.
 
 # Known Issues
-* Errors in yout ComfyUI workflow may leave the fastsafetensors loader in an allocated state, since ComfyUI can't free it. If this happens, you may get an OOM error on your next run. The workaround is to just quit and restart ComfyUI to clear VRAM.
+* Memory management is broken, as there is no way to free the memory allocated by fastsafetensors. This is due to the custom memory management used by fastsafetensors, which bypasses ComfyUI's built-in memory management. The workaround is to just quit and restart ComfyUI to clear VRAM.
 
-* This node has not been tested on machines with discrete GPUs.
+* Only minimal testing has been done on machines with discrete GPUs.
